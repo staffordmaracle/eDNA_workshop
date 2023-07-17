@@ -1,0 +1,403 @@
+#Some background on Unix:
+#unix = operating system which users can connect to remotely via terminals
+#text is used as input & output
+	#text is v light on resources compared to graphics
+	#allows unix to be used quickly/efficiently even when multiple terminals are running
+	#commands are also keep minimalistic as well = speed up use even more 
+	
+#take a minute to create bioinformatics folder on desktop + put two csv files there
+
+
+#1. Accessing the terminal
+
+#for window users - have mobaxterm downloaded
+https://mobaxterm.mobatek.net
+#for mac users - open the terminal from launchpad/other or finder
+
+#usually i will keep two open at a time - one terminal where i stay logged out of any
+	#compute canada system = use this for file transfers mostly just bc easier
+	#to copy files over when can see pathways in a different terminal
+#the other = i log into my compute canada cluster for whatever i may be doing 
+#so lets get those open - i usually use different colours bc fun 
+
+
+
+
+#2. Logging into compute canada clusters
+
+#At Queen's, we have access to 3 different clusters = Beluga, Cedar, Graham
+#cluster = a group of interconnected compute nodes (comp. unit) managed by a resource 
+	#manager acting like a single system. Basically it houses a bunch of nodes & nodes
+	#are what get allocated for you to run a job = bigger job = more nodes 
+#compute canada's technical glossary 
+	https://www.computecanada.ca/research-portal/accessing-resources/glossary/
+#i have used both cedar & graham, but have been using graham more lately 
+
+#if get remote host ID has changed error: 
+https://docs.computecanada.ca/wiki/SSH_security_improvements
+
+#let's log in:
+ssh -Y krishay8@graham.computecanada.ca
+ssh -Y krishay8@cedar.computecanada.ca
+#ssh = secure shell, securely connect to remote server or system 
+#this will ask you for a password - when you type it in, you won't be able to see it
+
+
+
+
+3. Resources available/used for each cluster
+
+#resource:https://www.lifewire.com/quota-linux-command-4095771
+quota #displays users' disk usage & limits 
+free -m #gives overview of how much memory have, how much in use, how much available
+
+
+
+
+4. Basic command line - navigating files/directories:
+
+pwd #get current working directory
+#let's try for both the terminals you have open - should see a difference (one is your 
+	#computer, one is logged into compute canada)
+
+
+ls #list contents of working directory = gives names of file & directories 
+#none of these have a .something e.g. .txt so we know they are directories/folders
+ls projects #see contents of projects directory 
+#i usually work in projects & scratchcd
+#scratch is primarily used for temporary files
+	#anything that can be easily rerun/recreated
+	#I have used it to house my STRUCTURE results  
+	#don't want to do any hefty jobs here 
+	#benefit = for smaller jobs, usually runs right away/quickly  
+	#once done, you'll want to move the files somewhere permanent e.g. projects folder
+ls -F #tells ls to tell us what each name is e.g. directory 
+ls -R #list contents of directories recursively
+ls -t #list things by time of last change, with most recent first
+
+
+cd <directory name> e.g. cd projects #change working directory
+#get into my directory using relative paths
+cd projects
+ls
+cd rrg-lough
+ls
+cd krishay8
+
+cd .. #move up cdone level - this would take me from krishay8 to rrg-lough 
+pwd #can see this with pwd 
+cd ../.. #move up two levels - this takes me all the way back home
+
+#however, quicker way from here to get into my folder would be:
+cd projects/rrg-lough/krishay8
+
+cd #cd without any directory takes you back to your home directory 
+cd ~ #same thing
+
+#so far have been using relative paths, but can also use absolute i.e. entire path 
+	#from root directory 
+cd /home/krishay8/projects/rrg-lough/krishay8
+
+
+
+
+
+5. Basic command line - making directories
+
+mkdir <diretory name> #to make a directory 
+#e.g. - make directory in your folder
+mkdir UNIX_tutorial 
+#if use ls should now see your new directory 
+#good practices for directory names = no white space, use letters/#s/_/-/.
+cd UNIX_tutorial
+
+
+
+
+6. File transfer 
+
+scp <source file path & name> <where ya wanna go> #scp = secure file transfer
+scp /Users/Kristen/Desktop/Bioinformatics/pumpkin_data.csv krishay8@graham.computecanada.ca:/home/krishay8/projects/rrg-lough/krishay8/UNIX_tutorial
+#it will ask for your password to allow the transfer 
+#will say 100% when finished loading 
+#this works both ways - can also transfer files from cluster to your computer
+	#later on - below
+	
+#may want to instead transfer a full folder 
+#can use -r i.e. the recursive function so that it transfers directory + all its contents
+scp -r /Users/Kristen/Desktop/Bioinformatics krishay8@graham.computecanada.ca:/home/krishay8/projects/rrg-lough/krishay8/
+
+#e.g. of copying directory from cedar to graham from my computer
+scp -r krishay8@cedar.computecanada.ca:/home/krishay8/scratch/fullsnps_structure krishay8@graham.computecanada.ca:/home/krishay8/projects/rrg-lough/krishay8/STRUCTURE_2019
+
+
+7. Downloading files - may download e.g. sequencing data from KGH
+#not going to actually do this bc takes a hot second
+
+#first need to make cd where you want to download
+e.g. cd projects/rrg-lough/krishay8/UNIX_tutorial
+
+   #downloading from KGH
+sftp USERID@IPaddress #secure file transfer program 
+#prompted to give password 
+
+   #see what files there are with ls then download the directory you want
+get -r directoryname #downloads directory + all contents 
+
+
+
+
+8. Using nano as a text editor
+
+#let's go back into UNIX_tutorial directory
+#nano is a text editor = uses plain character text
+	#most common use = write script for a task, then submit this as a job
+		#in this case would save file with .sh ending 
+	#need to tell it where it searches for an input file & where it saves its output
+	
+nano <new name of txt file>
+e.g. nano reminder.txt
+
+#text editor opens - can copy & paste script into or write into it 
+#can only use arrow keys to navigate, can't click around with mouse 
+#in text editor:
+This is a text editor!
+Bioinformatics is fun!
+#control x to exit 
+#yes to save/update changes (y), no to discard (n), c to cancel (c)
+#file name to write - can change name of file here if want
+	#e.g. change from reminder to cool_reminder
+	#enter
+	#save file under different name? - y
+#now if use ls, see our new file there
+
+#can reopen the file using the same command as when we created it:
+nano cool_reminder.txt
+#fun tip: if start writing a file name, can tab over & unix will complete it for you
+
+
+
+
+9. Running a job
+
+#I'll show a STRUCTURE example 
+nano submission_test.sh
+#example of what a script may look like:
+
+#!/bin/bash 
+#SBATCH -J gtseq_panel_structure_test #job name
+#SBATCH -N 1 #min number of nodes for job
+#SBATCH -n 1 #max number of tasks
+#SBATCH -c 1 #CPUs per task
+#SBATCH --mem=16g #memory required per node 
+#SBATCH -t 1-0:0:0 #max time will take = days-hours:mins:secs
+#SBATCH --mail-type=BEGIN,END,FAIL #messages you want to receive via email about job
+#SBATCH --mail-user=k.hayward@queensu.ca #where to send those emails
+#SBATCH -o gtpanel_K1_test_%j.o #output filename
+module load structure
+structure -K 1 -o gtpanel_structure_output/442loci_K1_1
+structure -K 1 -o gtpanel_structure_output/442loci_K1_2
+structure -K 1 -o gtpanel_structure_output/442loci_K1_3
+structure -K 1 -o gtpanel_structure_output/442loci_K1_4
+structure -K 1 -o gtpanel_structure_output/442loci_K1_5
+
+sbatch test_submission.sh #should say submitted batch job ..some number
+	#should get email when job starts because we specified
+squeue -u krishay8 #to see what is running/in queue
+scancel <job ID> #cancel the job, will get email that ended
+
+
+
+
+10. Moving & copying files & directories within the cluster
+
+#let's copy one of the csv files from the Bioinformatics directory to UNIX_tutorial 
+	#use relative path here - pwd = krishay8 (one level above both directories)
+	#cp <source> <destination>
+cp Bioinformatics/OvU_pumpkin.csv UNIX_tutorial
+#now if ls UNIX_tutorial should also see there - will be in both directories 
+
+#let's try moving a file instead
+	#mv <source> <destination>
+mv UNIX_tutorial/cool_reminder.txt Bioinformatics
+#now only see file in new location & not old 
+
+#what about whole directories? - use recursive to include contents
+	#let's copy the full UNIX_tutorial into the Bioinformatics directory
+	#cp -r <source> <destination>
+	#if wanted to move: mv -r <source> <destination>
+cp -r UNIX_tutorial Bioinformatics 
+#cd Bioinformatics - should now see full UNIX_tutorial there + contents (ls UNIX_tutorial)
+
+#CAREFUL: mv will overwrite any existing file with same name 
+#use mv -i to ask for confirmation 
+
+
+
+
+11. Deleting files & directories
+
+#now we have some repetition so let's delete some files 
+	#we have two files that are in both the main Bioinformatics folder & UNIX_tutorial 
+rm <file name>
+rm pumpkin.csv #removes from Bioinformatics but not UNIX_tutorial bc pwd is Bioinformatics
+
+#safe way to do this = ask for confirmation
+rm -i <file name>
+rm -i OvU_pumpkin.csv
+#type yes if want to remove 
+
+#if wanted to remove full directory:
+	#let's make one just to delete it: mkdir Fun_notes
+	#mv the cool_reminder.txt into this - how??
+	#mv -i cool_reminder.txt Fun_notes
+	
+rm -r <directory name>
+#again safer to:
+rm -r -i <directory name>
+rm -r -i Fun_notes 
+#give confirmation = yes
+
+#can also go back & remove UNIX_tutorial from krishay8 directory
+#let's do this a different way
+rmdir UNIX_tutorial
+
+
+
+
+12. Renaming files
+
+#let's go back into UNIX_tutorial = cd UNIX_tutorial
+mv <current file name> <new file name>
+mv pumpkin_data.csv ptoadlet_data.csv
+#ls - name has changed 
+
+#or if want to copy elsewhere & rename
+cd UNIX_tutorial
+cp tutorial_data/ptoadlet_data.csv pswag_data.txt
+
+
+
+
+
+13. Moving/copying with wildcards, copying/moving multiple files 
+
+mkdir tutorial_data #in UNIX_tutorial directory
+#both files we want to copy have a csv ending
+cp *<extension> <destination>
+cp *.csv tutorial_data
+
+#alternatively
+	#let's remove those & try a different way
+rm -r -i tutorial_data
+mkdir tutorial_data
+mv or cp <file name> <file name> <destination>
+mv OvU_pumpkin.csv ptoadlet_data.csv tutorial_data
+
+#Tip: ? is also a wildcard but only for one character
+#e.g. OvU_pumpki?.* would give OvU_pumpkin.csv
+#so would ???_pumki?.* etc
+
+
+
+
+14. Word count command
+
+cd tutorial_data
+nano coolbeans.txt
+#type something e.g. 
+the coolest of beans
+
+is definitely
+
+those of the string variety 
+#exit & save
+
+wc <file> #counts lines, words, characters in file
+wc coolbeans.txt 
+#has 5 lines (includes spaces), 11 words, 66 characters
+
+wc - l <filename> #only lines per file
+wc -w <filename> #only words per file
+wc -c <filename> #only characters per file 
+
+
+
+
+15. Looking at the data:
+
+cat <filename> #prints contents of files 
+	#e.g. cat OvU_pumpkin.csv
+less <filename> displays screenful of file
+	#go forward one screen = space bar
+	#back with b
+	#quit with q
+	#e.g. less OvU_pumpkin.csv
+ls -S #view contents of directory based on size, default is alphabetical
+ls -t #based on date of modification
+ls -X #based on extension
+ls -l #long list = show extra info e.g. file size
+ls -h #makes file size human readable
+ls -R #lists contents of directories recursively
+ls -R -t #files/directories in each directory sorted by t of last change 
+head -4 <filename> #see first few lines, in this case 4
+	#e.g. head -4 OvU_pumpkin.txt
+tail -4 <filename> #see last few lines, in this case 4
+	#e.g. tail -4 OvU_pumpkin.txt
+
+
+
+17. Searching for files
+
+#e.g. cd UNIX_tutorial
+find directoryname/subdirectory #find all files in directory & subdirectory
+	#e.g. find UNIX_tutorial/tutorial_data    #at pwd = Bioinformatics
+find -name filename #search for filename in current directory & subdirectories 
+
+
+
+
+18. Searching within a file with grep
+
+grep 'word' filename
+	#grep 'coolest' coolbeans.txt
+grep -i 'word' filename #case insensitive search 
+	#grep -i 'BEANS' coolbeans.txt
+grep -c 'word' filename #search & display total number of times word appears in file
+	#grep -c 'the' coolbeans.txt
+
+
+
+18. History command
+history #will give all your past commands during session
+
+
+
+
+
+16. Getting help
+
+<function> --help
+	#e.g. ls --help
+man <function>
+	#e.g. man ls
+	#q to quit
+
+
+
+
+17. Exiting the cluster
+exit
+
+
+
+#once get all this down, can start piping demands together but that's for another day!
+
+
+#Some helpful resources:
+https://www.unixtutorial.org/basic-unix-commands
+https://slurm.schedmd.com/sbatch.html #parameters for submitting a job
+https://docs.computecanada.ca/wiki/Compute_Canada_Documentation
+https://docs.computecanada.ca/wiki/Linux_introduction
+https://www.cyberciti.biz/faq/howto-use-grep-command-in-linux-unix/
+https://ubuntu.com/tutorials/command-line-for-beginners#1-overview
