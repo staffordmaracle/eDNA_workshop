@@ -18,22 +18,35 @@ ls
 •	We will first have to prepare our workspace by downloading some dependancies that our pipeline will run for us as well as any data that we are going to use.
 
 # Preparing your workspace
-## Install FLASH – only once for initial installation
+## Install FLASH 
+Copy and paste the following script in a text editor on your home directory.
 ``` command
-wget https://ccb.jhu.edu/software/FLASH/FLASH-1.2.11.tar.gz
-tar -zxvf FLASH-1.2.11.tar.gz
-cd FLASH-1.2.11
-make
-module load StdEnv/2020 gcc/9.3.0 flash/1.2.11
+export INSDIR=$HOME/software
+mkdir -p $INSDIR
+module --force purge
+module load StdEnv/2020 gcc/9.3.0
+module load python/3.7
+module load r/4.1.2
+module load java
+module load vsearch/2.21.1 flash
 
-#swarm
+cd $INSDIR
 git clone https://github.com/torognes/swarm.git
 cd swarm/
-make
+make -j4
+cd $INSDIR
+git clone https://github.com/enormandeau/barque
+```
+Save as `installbarque.sh` and execute the file using the code below:
+```command
+chmod +x ./InstallBarque.sh
+``` 
+```command
+./InstallBarque.sh
 ```
 ## Create Bash Script
 We will use `Bash` to submit our request to run our pipeline on a different node. We could run it directly on our login node but this can slow down the node for others trying to login or manage their files. To do this we will make a ‘Bash script’ in a text editor and specify it as a script with `.sh` at the end of the file name.
-•	Make a .sh file to submit as a job: use the ‘nano’ function to open a text editor
+•	Make a .sh file to submit as a job: use the `nano` function to open a text editor
 `nano`
 •	Fill parameters as needed. Below is my basic job
 ```command
