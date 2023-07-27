@@ -69,6 +69,27 @@ it will ask for your password to allow the transfer
 will say 100% when finished loading 
 this works both ways - can also transfer files from a server to your computer
 
+## Using nano as a text editor
+`nano ` this will open a new empty file
+`nano <filename.txt>` will open the file named filename.txt
+
+nano is a text editor = uses plain character text
+	most common use = write script for a task, then submit this as a job
+ 	how you end your filename will change its use, 
+  `filename.sh` will specify this file as a script
+  `filename.txt` will specify a text document
+  `filename.py` will specify a python script
+ 	this tells it where to search for an input file & where it saves its output
+you can copy & paste script into or write into it 
+you navigate by using the arrow keys, your cursor wont work
+control x to exit 
+yes to save/update changes (y), no to discard (n), c to cancel (c)
+file name to write - can change name of file here if want
+enter
+save file under different name? - y
+now if use `ls`, see our new file there
+
+
 
 
 
