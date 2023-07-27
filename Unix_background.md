@@ -54,9 +54,22 @@ You can look inside a directory using the `ls directoryname` command
 `cd ..` move back one directory level  
 `cd ../..` move back two levels  
 `cd  ` will move back to the home directory  
-`cd ~` will also do this  
+`cd ~` will also move back to the home directory  
 you can list a path to streamline the process   
 `cd outer_directory/inner_directory/more_inner_directory`  
+
+## making directories
+`mkdir <diretory name>` to make a directory 
+good practices for directory names = no white space, use letters/#s/_/-/.
+
+## File transfer from computer to server 
+`scp <source file path & name> <where you want to go>` scp = secure copy paste
+scp /Users/computername/Desktop/file.csv sa123456@login.cac.queensu.ca:~/directory_x/
+it will ask for your password to allow the transfer 
+will say 100% when finished loading 
+this works both ways - can also transfer files from a server to your computer
+
+
 
 
 
