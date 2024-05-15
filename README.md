@@ -53,8 +53,8 @@ We will use `Bash` to submit our request to run our pipeline on a different node
 •	Fill parameters as needed. Below is my basic job.
 ```command
 #!/bin/bash
-#SBATCH –-reservation=teaching
-#SBATCH –-account=teaching
+#SBATCH --reservation=teaching
+#SBATCH --account=teaching
 #SBATCH -J barque_test #job name
 #SBATCH -N 1 #min number of nodes for job
 #SBATCH -n 1 #max number of tasks
@@ -84,7 +84,7 @@ ls
 ```
 The **12S.fasta.gz** is our database in a GNU zip file. We could unzip it using `gunzip 12S.fasta.gz` to look at the species in our database. For now we will keep it zipped. If you open it `gzip 12S.fasta.gz` will rezip it.
 
-The **Raw_reads** folder contain raw reads for each of our samples. You can look at these by changing directory `ch Raw_reads` and list `ls` to see the gzipped fasta files. `cd ..` to leave the Raw_reads directory.
+The **Raw_reads** folder contain raw reads for each of our samples. You can look at these by changing directory `cd Raw_reads` and list `ls` to see the gzipped fasta files. `cd ..` to leave the Raw_reads directory.
 
 You should be in the base directory `[sa125050@caclogin03]$`. If you need to leave the **eDNA_workshop** directory as well, use `cd ..` to go back out one level.
 
@@ -112,21 +112,24 @@ cp eDNA_workshop/12S.fasta.gz barque/03_databases/
 •	Edit `02_info/primers.csv` to provide information describing your primers
 *Primer name, forward seq, reverse seq, Length min (=length of the target amplicon -30bp), Length ma (length of the target amplicon + 30bp), database name, thresholds species /…*.
 ```command
+cd barque/02_info/
+```
+```command
 nano primers.csv
   #If you have your primers saved in a backup folder just copy and paste it in the current barque run.
 cp 01_barque_backup/02_info/primers.csv barque/02_info/primers.csv
 `#Or copy and paste below.
-MiFish, GTCGGTAAAACTCGTGCCAGC, CATAGTGGGGTATCTAATCCCAGTTTG,150,190,12S,0.97,0.95,0.90
+12S_200pb, GTCGGTAAAACTCGTGCCAGC, CATAGTGGGGTATCTAATCCCAGTTTG,150,190,12S,0.97,0.95,0.90
 ```
 •	The primer.csv file is accessed during the pipeline but only the lines that are not hashtag will be used. So you will want to hashtag all the primers you didn’t use and remove hashtags from the line (primers) you used.
 
 ## Specify pipeline configuration
 Change the configuration file to control the specifications of each software. Nothing needs to be changed for our data but below is how you access the file to view and modify the parameters.
 ```command
-ch barque/02_info
+cd barque/02_info
 nano barque_config.sh
 ```
-## Load modules 
+## Load modules (skip)
 This is included in the `run_barque.sh` we made earlier so you won’t have to run the below code but note that this is happening in the background.
 ```command
 #  module load vsearch/2.15.2
@@ -139,9 +142,10 @@ Make sure the that the configuration file name is the same in the `02_info` dire
 We can now ask for the resources to run the pipeline using *SLURM*, an open source scheduler. We will now use the `run_barque.sh` file we made earlier.
 ```command
 sbatch run_barque.sh
-# The line below is built into the run_barque.sh file so you don’t need to run it but it is the one that ultimately runs the pipeline for us.
-#  ./barque 02_info/barque_config.sh
 ```
+The line below is built into the run_barque.sh file so you don’t need to run it but it is the one that ultimately runs the pipeline for us.
+./barque 02_info/barque_config.sh
+
 # Check your results
 As barque runs through the different packages it passes the files to different folders and ultimately ending in the results directory `12_results`. If the run was completed to fruition, this directory will contain multiple files. We will check them below.
 
