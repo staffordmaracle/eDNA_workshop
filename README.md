@@ -84,9 +84,9 @@ ls
 ```
 The **12S.fasta.gz** is our database in a GNU zip file. We could unzip it using `gunzip 12S.fasta.gz` to look at the species in our database. For now we will keep it zipped. If you open it `gzip 12S.fasta.gz` will rezip it.
 
-The **Raw_reads** folder contain raw reads for each of our samples. You can look at these by changing directory `ch Raw_reads` and list `ls` to see the gzipped fasta files. `ch ..` to leave the Raw_reads directory.
+The **Raw_reads** folder contain raw reads for each of our samples. You can look at these by changing directory `ch Raw_reads` and list `ls` to see the gzipped fasta files. `cd ..` to leave the Raw_reads directory.
 
-You should be in the base directory `[sa125050@caclogin03]$`. If you need to leave the **eDNA_workshop** directory as well, use `ch ..` to go back out one level.
+You should be in the base directory `[sa125050@caclogin03]$`. If you need to leave the **eDNA_workshop** directory as well, use `cd ..` to go back out one level.
 
 # Preparing a run
 ## Create a local copy of the [Barque pipeline](https://github.com/enormandeau/barque) 
@@ -94,7 +94,7 @@ You should be in the base directory `[sa125050@caclogin03]$`. If you need to lea
 ```command
 git clone https://github.com/enormandeau/barque
 ```
-• Look around the directory using `cd barque` before moving on. remember `ch filename` will move you into a directory and `ch ..` will move you out.
+• Look around the directory using `cd barque` before moving on. remember `ch filename` will move you into a directory and `cd ..` will move you out.
 
 ## Filling the pipeline with our data
 From our base directory, copy and paste the sequences from the Raw_reads folder in the eDNA_workshop directory into the barque data folder using the `cp` command. 
