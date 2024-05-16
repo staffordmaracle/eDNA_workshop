@@ -65,7 +65,7 @@ We will use `Bash` to submit our request to run our pipeline on a different node
 #SBATCH --mail-user=youremail@example.ca #where to send those emails
 #SBATCH -o barque_test_done.o #output filename
 cd barque
-module load vsearch/2.15.2 gcc/9.3.0 r/4.0.2 StdEnv/2020 flash/1.2.11
+module load StdEnv/2020 vsearch/2.15.2 gcc/9.3.0 r/4.0.2 flash/1.2.11
 ./barque 02_info/barque_config.sh
 ```
 •	Change the email you want the confirmation reports to go to.
